@@ -1,0 +1,160 @@
+* {
+  font-family: Tahoma, sans-serif;
+}
+.navbarmargins {
+  margin-top: 10rem;
+  margin-left: 20rem;
+  margin-right: 20rem;
+  margin-bottom: 2rem;
+}
+
+.btn-transparent {
+  background-color: transparent;
+  border: none;
+  color: #543dda;
+}
+
+.btn-transparent:hover {
+  border: 1px solid #007bff;
+}
+
+.btn-transparent:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.taskbox-outer {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  margin-left: 20rem;
+  margin-right: 20rem;
+  border: 1px solid #ccc9c9;
+  border-radius: 20px;
+}
+
+.taskbox-inner {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+}
+
+.taskdiv {
+  font-size: 25px;
+  font-style: bold;
+}
+
+.taskp {
+  margin-left: 15rem;
+  margin-right: 15rem;
+}
+
+.breakline {
+  margin-top: 5em;
+  margin-left: 50em;
+  margin-right: 50em;
+  margin-bottom: 5em;
+}
+
+.imgfont {
+  font-style: italic;
+  font-size: 14px;
+}
+
+.figcaption {
+  font-style: italic;
+  font-size: 14px;
+}
+
+.title-margin {
+  margin-top: 5rem;
+  margin-bottom: 10rem;
+}
+
+.breakline-top {
+  margin-top: 2rem;
+  margin-left: 10em;
+  margin-right: 10em;
+}
+
+.breakline-bottom {
+  margin-bottom: 2rem;
+  margin-left: 10em;
+  margin-right: 10em;
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  display: none;
+}
+
+.btn-scroll-to-top {
+  border-radius: 15px;
+  border-color: #543dda;
+  background-color: #543dda;
+  color: #fff;
+}
+
+.btn-scroll-to-top:hover {
+  border-color: #543dda;
+  background-color: transparent;
+  color: #543dda;
+}
+
+.btn-scroll-to-top:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+@media print {
+  .taskbox-outer {
+    page-break-before: always;
+  }
+
+  /* .taskbox-inner, */
+  .taskdiv,
+  .taskp,
+  .container,
+  .img-container,
+  .row,
+  .col-sm-6 {
+    margin: initial;
+  }
+
+  .taskbox-outer,
+  .taskbox-inner {
+    margin-top: 0.3in;
+    margin-bot: 0.3in;
+    margin-left: 0.5in;
+    margin-right: 0.5in;
+  }
+
+  .img-container {
+    margin: initial;
+  }
+
+  .nav,
+  .btn-scroll-to-top {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1980px) and (min-width: 375px) {
+  .navbarmargins,
+  .taskbox-outer,
+  .taskbox-inner,
+  .taskdiv,
+  .taskp,
+  .breakline,
+  .imgfont,
+  .title-margin,
+  .breakline-top,
+  .breakline-bottom {
+    margin: 2rem;
+  }
+
+  .scroll-to-top {
+    bottom: 1em;
+    right: 1em;
+  }
+}

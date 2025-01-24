@@ -1,0 +1,690 @@
+<!-- CHANGE the link tags if you want to see template -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../template.css" />
+
+    <title>MeshEdit</title>
+  </head>
+
+  <hr class="breakline-top" />
+
+  <body>
+    <div class="title-margin">
+      <h1 class="text-center mt-5">CS 184: Computer Graphics, Spring 2024</h1>
+      <h1 class="text-center mt-4">Project 2: MeshEdit</h1>
+      <h4 class="text-center mt-4">Henry Khaung, Aaron Xu</h4>
+      <h6 class="text-center mt-1"></h6>
+    </div>
+
+    <ul class="nav nav-tabs navbarmargins justify-content-center">
+      <li class="nav-item">
+        <a
+          type="button"
+          class="btn-transparent nav-link"
+          href="https://cal-cs184-student.github.io/hw-webpages-sp24-henrykhaung/"
+        >
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#overview')"
+        >
+          Overview
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-1')"
+        >
+          Task 1
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-2')"
+        >
+          Task 2
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-3')"
+        >
+          Task 3
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-4')"
+        >
+          Task 4
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-5')"
+        >
+          Task 5
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-6')"
+        >
+          Task 6
+        </button>
+      </li>
+    </ul>
+
+    <div class="taskbox-outer" id="overview">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Overview</h3>
+        </div>
+
+        <div class="text-start taskp mt-4 mb-5">
+          <p>
+            Implemented Bezier curves and expanded them to also work on 3D
+            surfaces. Then, implemented Phong shading so that meshes can have
+            better shading. Finally, implemented loop subdivision to increase
+            resolution for low resolution polygon meshes by implementing local
+            remesh operations `flipEdge` and `splitEdge`.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <div class="taskbox-outer" id="task-1">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 1: Bezier Curves with 1D de Casteljau Subdivision</h3>
+        </div>
+
+        <div class="text-start taskp mt-4 mb-5">
+          <p>
+            In this task, we implemented de Casteljau's algorithm for 1D which
+            is useful for finding Bezier curves.
+          </p>
+          <p>
+            de Casteljau's algorithm takes the given control points, inserts a
+            point using linear interpolation between each control point, and
+            does this recursively until we are left with only one point.
+            Essentially, it recursively finds intermediate control points
+            between each pair of given control points using linear interpolation
+            until only one point remains. This enables for a smooth curve.
+          </p>
+
+          <p>
+            The implementation is straightforward. Simply iterate through the
+            given control points, which is a list of points (x, y) and during
+            the iteration, perform linear interpolation between the current
+            point and the next point and add this interpolated point to a new
+            list of points. This new list containing intermediate points is
+            returned. Eventually, this new list will only contain one final
+            point that lies on the Bezier curve. This final point is the red
+            point shown below in the images.
+          </p>
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task1start.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Given 6 control points
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task1start1.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    evaluateStep is called once
+                  </figcaption>
+                </td>
+              </tr>
+              <br />
+              <tr>
+                <td>
+                  <img src="task1start2.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    evaluateStep is called twice
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task1start3.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    evaluateStep is called three times
+                  </figcaption>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img src="task1start4.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    evaluateStep is called four times
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task1end.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Final intermediate point with completed bezier curve!
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="text-center mt-5">
+            <img src="task1t.gif" height="400px" />
+            <p class="imgfont">when parameter t is changed</p>
+          </div>
+
+          <div>
+            <p>
+              If we have 6 control points, we would have to do linear
+              interpolation 5 times to get 5 intermediate control points for the
+              first step of de Casteljau's algorithm. Then, with these 5 points,
+              we would have to do linear interpolation 4 times to get 4
+              intermediate points. This repeats until we have one final control
+              point as shown above in the images. Essentially, given n points,
+              we have to find n-1 intermediate points using linear interpolation
+              until we are left with one final point that lies on the Bezier
+              curve. This algorithm is used to find the bezier curve as
+              indicated by the green curve above.
+            </p>
+
+            <p>
+              The parameter t ranges from 0 to 1 and determines the position of
+              the final intermediate point. For example, when t = 0, this
+              corresponds to the starting point. In the gif above, it would be
+              the leftmost and bottommost point whereas when t = 1, this
+              corresponds to the last point which is the rightmost and
+              bottommost point. The parameter t essentially controls how far
+              along the curve the interpolated point should be.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 2 -->
+    <div class="taskbox-outer" id="task-2">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
+        </div>
+        <div class="text-start taskp mt-4">
+          <p>
+            In this task, we extended de Casteljau's algorithm to work with
+            surfaces.
+          </p>
+
+          <p>
+            Instead of working with a list of 2D coordinates, we are now given a
+            grid, or matrix, of 3D coordinates. We first find Bezier curve
+            points for each row of points using de Casteljau's algorithm. Then,
+            we find the Bezier surface point on the computed Bezier curve
+            points.
+          </p>
+          <ul>
+            <li>
+              `evaluateStep`
+              <p>
+                This function is called when we want to evaluate the next step
+                of de Casteljau's algorithm and is a helper function for
+                `evaluate1D`. It is the same logic as the `evaluateStep`
+                function for BezierCurve except we work with 3D coordinates.
+              </p>
+            </li>
+            <li>
+              `evaluate1D`
+              <p>
+                This function is called when we want to fully evaluate de
+                Casteljau's algorithm given a list of control points and
+                pararmeter t. It calls `evaluateStep` until we are left with one
+                final point which would be the evaluated curve point.
+              </p>
+            </li>
+            <li>
+              `evaluate`
+              <p>
+                This function finds us the Bezier surface point given a grid of
+                control points and parameters u and v by making use of the
+                helper functions from above: `evaluate1D` and `evaluateStep`. As
+                mentioned above, we first perform de Casteljau's algorithm on
+                the rows using parameter u to find Bezier curve points. Then,
+                the final surface point is determined by again calling
+                `evaluate1D` but instead with parameter v.
+              </p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="text-center mt-5">
+          <img src="task2.png" height="600px" />
+          <p class="imgfont">Screenshot of bez/teapot.bez</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 3 -->
+    <div class="taskbox-outer" id="task-3">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 3: Area-Weighted Vertex Normals</h3>
+        </div>
+
+        <div class="text-start taskp mt-4 mb-5">
+          <p>
+            In this task, we implemented area-weighted normal vectors at
+            vertices. These vertex normals can be used for Phong shading which
+            is a better shading for smooth shading compared to flat shading.
+          </p>
+          <p>
+            To implement this, we find all the neighboring faces that share the
+            given vertex and for each face, find the area and normal. Then,
+            compute the area weighted norm. We can then sum all the area
+            weighted norms of each face and normalize it. This would be the unit
+            normal at the given vertex.
+          </p>
+
+          <br />
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task3.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Teapot without shading (without vertex normals)
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task3shading.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Teapot with shading
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 4 -->
+    <div class="taskbox-outer" id="task-4">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 4: Edge Flip</h3>
+        </div>
+
+        <div class="text-start taskp mt-4 mb-5">
+          <p>
+            In this task, we implemented a remeshing operation on an edge. This
+            operation flips an edge by changing its two endpoints, or vertices,
+            to another pair of vertices.
+          </p>
+          <p>
+            To implement this, we wrote down a list of all elements: half-edges,
+            vertices, edges, and faces in a simple mesh. The simple mesh
+            consists of two triangles glued together by a half-edge. This list
+            of elements represents what the elements were originally pointing to
+            before the flip operation. This list is important because it ensures
+            that we do not forget to reassign the pointers after the flip
+            operation. Finally, we perform the flip operation by changing the
+            given edge's two vertices to the other two vertices in the simple
+            mesh and reassigning all pointers. Keeping track of all elements and
+            doing so correctly was crucial in ensuring that they were no bugs in
+            this function. This required a complete understanding of the
+            halfedge data structure which we did not have initially. We were
+            confused with halfedge->vertex; we initially thought
+            halfedge->vertex meant the vertex pointed to by the halfedge. After
+            fully understanding how the halfedge datastructure worked, we were
+            able to easily implement the flip operation.
+          </p>
+
+          <br />
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task3.png" align="middle" width="360px" />
+                  <figcaption class="figcaption" align="middle">
+                    Teapot before any flip operation
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task4.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Teapot after some flip operations
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 5 -->
+    <div class="taskbox-outer" id="task-5">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 5: Edge Split</h3>
+        </div>
+
+        <div class="text-start taskp mt-4 mb-5">
+          <p>
+            In this task, we implemented a remeshing operation on an edge. This
+            operation splits the given edge and inserts a new vertex at the
+            midpoint and connects the two opposing vertex that were not
+            originally connected by the given edge.
+          </p>
+          <p>
+            Implementing this was similar to the implementation of `flipEdge`
+            except now, we have to account for new elements. To implement this,
+            we first drew a diagram of two triangles connected by a half-edge
+            before the split. We labeled every pointer in the diagram before we
+            perform the operation just like we did in `flipEdge`: halfedges,
+            vertices, edges, and faces. In code, we tracked all these pointers.
+            Then, we drew a diagram of what would happen to these two triangles
+            after the split operation and labeled what each pointer would point
+            to. In code, this is done by using `setNeighbor` function; we also
+            had to create new halfedges, new vertices, new edges, and faces
+            which is done by calling `newHalfedge`, `newVertex`, `newEdge`, and
+            `newFace`. Overall, these diagrams were key in helping us implement
+            this function because they helped us easily determine what each
+            pointer should be reassigned to.
+          </p>
+
+          <br />
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task5.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Before any edge splits
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task5_1.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    After an edge split
+                  </figcaption>
+                </td>
+              </tr>
+              <br />
+              <tr>
+                <td>
+                  <img src="task5_22.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    After some edge splits and edge flips
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 6 -->
+    <div class="taskbox-outer" id="task-6">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 6: Loop Subdivision for Mesh Upsampling</h3>
+        </div>
+
+        <div class="text-start taskp mt-4 mb-5">
+          <p>
+            In this task, we implement loop subdivision which increases the
+            number of triangles in the mesh. This way, we can convert a low
+            resolution polygon mesh into a higher resolution. This is a similar
+            concept to supersampling in antialiasing.
+          </p>
+          <p>To implement this,</p>
+          <ol>
+            <li>
+              We computed new positions for all the vertices in the input mesh
+              and stored these new positions in the `newPosition` property of
+              the `Vertex` class. To compute a new position, we can use the
+              following formula:
+              <br />
+              (1 - n * u) * original_position + u *
+              original_neighbor_position_sum
+              <br />
+              where n is the degree of the current vertex, u is a constant
+              dependent on n, original_position is the original position of the
+              current vertex, and original_neighbor_position_sum is the sum of
+              all neighboring vertices' positions. When n is 3, then u is 3/16;
+              otherwise, u is 3/(8 * n).
+            </li>
+            <br />
+            <li>
+              Then, we computed the new vertex positions and stored it in
+              `newPosition` property of the `Edge` class. The new vertex
+              positions are calculated using the following formula:
+              <br />
+              3/8 * (A + B) + 1/8 * (C + D)
+              <br />
+              where A and B are the positions of the vertices that share the
+              edge that connects two triangles together and C and D are the
+              positions of the other vertices of each of the two triangles.
+            </li>
+            <br />
+            <li>
+              Then, we split every edge in the mesh that is old, or in the
+              original mesh, using the `splitEdge` function. This returns a
+              midpoint vertex which we set its position to the new position we
+              stored in `newPosition` of the `Edge` class.
+            </li>
+            <br />
+            <li>
+              After this, we flip any new edge that connects an old and new
+              vertex.
+            </li>
+            <br />
+            <li>We then set the new vertex positions for every vertex.</li>
+          </ol>
+
+          <p>
+            Following these steps, we were able to make the upsample function
+            work. However, it did not produce the expected results. There were
+            two bugs. Initially, the upsample function creates a mesh with all
+            the faces missing. This was because we did not set any edges to be
+            `isNew` after splitting. After this was fixed, we encountered an
+            error where the upsampled mesh results in a mesh that is missing
+            polygons. This was not a bug from the upsample function but rather a
+            bug from our `splitEdge` function. The problem was fixed by properly
+            reassigning all the pointers, new and old, of the input mesh of the
+            function.
+          </p>
+
+          <p>
+            After loop subdivision, sharp corners and edges become smoother
+            since the number of polygons in the mesh are increased. You can
+            reduce this effect by pre-splitting edges near the sharp corners and
+            edges.
+          </p>
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task6nosharp.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Before subdivision
+                  </figcaption>
+                  <br />
+                </td>
+                <td>
+                  <img src="task6nosharpL.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    After subdivision, it becomes rounded
+                  </figcaption>
+                  <br />
+                </td>
+              </tr>
+              <br />
+              <tr>
+                <td>
+                  <img src="task6sharp.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    After pre-splitting edges around sharp corners and
+                    subdivision
+                  </figcaption>
+                  <br />
+                </td>
+                <td>
+                  <img
+                    src="task6sharp_rotate.png"
+                    align="middle"
+                    width="400px"
+                  />
+                  <figcaption class="figcaption" align="middle">
+                    Viewing the mesh from the side shows us that the sharp
+                    corner is somewhat maintained
+                  </figcaption>
+                  <br />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <p>
+            Similarly, the cube is not symmetrical after repeated subdivisions
+            because originally, for each of its faces, it only has one inner
+            edge which causes it to be asymmetric. The fix is to pre-split this
+            edge for each face and then do subdivision.
+          </p>
+
+          <br />
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img
+                    src="task6.png"
+                    align="middle"
+                    width="400px"
+                    height="400px"
+                  />
+                  <figcaption class="figcaption" align="middle">
+                    This inner edge highlighted white makes the cube
+                    asymmetrical. The fix is to pre-split!
+                  </figcaption>
+                  <br />
+                </td>
+                <td>
+                  <img
+                    src="task6asym.png"
+                    align="middle"
+                    width="400px"
+                    height="400px"
+                  />
+                  <figcaption class="figcaption" align="middle">
+                    Asymmetric after repeated subdivisions
+                  </figcaption>
+                  <br />
+                </td>
+              </tr>
+              <br />
+              <tr>
+                <td>
+                  <img
+                    src="task6presplit.png"
+                    align="middle"
+                    width="400px"
+                    height="400px"
+                  />
+                  <figcaption class="figcaption" align="middle">
+                    Splitting the white edge once and doing this for all faces
+                    will make the cube symmetrical.
+                  </figcaption>
+                  <br />
+                </td>
+                <td>
+                  <img
+                    src="task6sym.png"
+                    align="middle"
+                    width="400px"
+                    height="400px"
+                  />
+                  <figcaption class="figcaption" align="middle">
+                    The cube is now symmetric!
+                  </figcaption>
+                  <br />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline-bottom" />
+
+    <!-- UI -->
+
+    <button class="btn btn-primary scroll-to-top" onclick="scrollToTop()">
+      Scroll to Top
+    </button>
+
+    <!-- Bootstrap JS scripts (jQuery and Popper.js) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- scroll functions -->
+    <script src="../template.js"></script>
+  </body>
+</html>

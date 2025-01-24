@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Henry Khaung</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="assets/fontawesome/css/solid.css" rel="stylesheet" />
+    <link href="assets/fontawesome/css/brands.css" rel="stylesheet" />
+    <link href="assets/fontawesome/css/fontawesome.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <main>
+      <div class="window">
+        <div class="outer yosemite">
+          <button class="dot red" onclick="print_close()"></button>
+          <button class="dot amber"></button>
+          <button class="dot green"></button>
+          <button id="window-name" onclick="miscbutton()">Henry Khaung</button>
+        </div>
+        <div id="profile-box">
+          <div id="profile">
+            <img
+              id="profile-image"
+              src="assets/profile_image.png"
+              alt="profile image"
+            />
+            <div id="profile-description">
+              <h3>Hi there!</h3>
+              <p>
+                I am currently a student at UC Berkeley studying Electrical
+                Engineering and Computer Sciences. I am interested in web dev
+                and computer graphics!
+              </p>
+              <p>
+                In my free time, you can find me at the gym shooting some hoops,
+                playing osu!, or at the local farmers' market enjoying free
+                samples.
+              </p>
+              
+              <div class="projects-container">
+                <span><a class="project-link" href="/calculators/restaurant-check/restaurant-check-calc.html">Receipt Calculator</a></span>
+                <span><a class="project-link" href="/cs184/index.html">CS184 Projects</a></span>
+              </div>
+            </div>
+          </div>
+
+          <div id="profile-contact">
+            <a href="mailto:henrykhaung@berkeley.edu" target="_blank"
+              ><i class="fa-solid fa-envelope"></i
+            ></a>
+            <a href="https://www.linkedin.com/in/henrykhaung/" target="_blank"
+              ><i class="fa-brands fa-linkedin"></i
+            ></a>
+            <a href="https://github.com/hkhaung" target="_blank"
+              ><i class="fa-brands fa-github-square"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+body {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #800080, #ffffff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  /* Ensure the full height of the viewport */
+}
+
+.outer {
+  background: #b4b4b4;
+  opacity: 0.9;
+  width: 680px;
+  margin: 0 auto;
+  padding: 10px;
+  /* padding-left: 30px; */
+  /* padding-right: 20px; */
+  border-radius: 7px 7px 0px 0px;
+
+  &.dark {
+    background: #273138;
+
+    .dot {
+      background: #4a5c66;
+    }
+  }
+
+  &.yosemite {
+    background: #f6f6f6;
+    border: 1px solid #d8d8d8;
+    border-bottom: 1px solid #b4b4b4;
+  }
+
+  .dot {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #f9f9f9;
+    border-radius: 50%;
+    margin: 0 4px 0 0;
+
+    &.red {
+      background: #ff6057;
+      border: 1px solid #e14640;
+    }
+
+    &.amber {
+      background: #ffbd2e;
+      border: 1px solid #dfa123;
+    }
+
+    &.green {
+      background: #27c93f;
+      border: 1px solid #1dad2b;
+    }
+  }
+}
+
+.window {
+  border-radius: 20px;
+  box-shadow: 80px -70px teal;
+}
+
+#window-name {
+  font-size: 14px;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: bold;
+  display: inline-block;
+  align-items: center;
+  margin-left: 220px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+#logo {
+  cursor: pointer;
+  font-size: 36px;
+}
+
+#profile-box {
+  background-color: black;
+  border: 1px solid black;
+  border-radius: 0px 0px 20px 20px;
+  width: 700px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  /* padding: 40px; */
+}
+
+#profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 40px 40px 5px 40px;
+  margin-top: 40px;
+}
+
+#profile-image {
+  border-radius: 30px;
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+}
+
+p {
+  background-color: black;
+}
+
+h3 {
+  background-color: black;
+}
+
+#profile-description {
+  padding: 0px 0px 0px 30px;
+  text-align: left;
+  color: white;
+  background-color: black;
+}
+
+#profile-contact {
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+
+#profile-contact a i {
+  font-size: 30px;
+  margin: 0 5px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+#profile-contact a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.project-link {
+  text-decoration: underline;
+  color: lightblue;
+}

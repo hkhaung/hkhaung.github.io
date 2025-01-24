@@ -1,0 +1,700 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../template.css" />
+
+    <title>Rasterizer</title>
+  </head>
+
+  <hr class="breakline-top" />
+
+  <body>
+    <div class="title-margin">
+      <h1 class="text-center mt-5">CS 184: Computer Graphics, Spring 2024</h1>
+      <h1 class="text-center mt-4">Project 1: Rasterizer</h1>
+      <h4 class="text-center mt-4">Henry Khaung</h4>
+      <h6 class="text-center mt-1"></h6>
+    </div>
+
+    <ul class="nav nav-tabs navbarmargins justify-content-center">
+      <li class="nav-item">
+        <a
+          type="button"
+          class="btn-transparent nav-link"
+          href="https://cal-cs184-student.github.io/hw-webpages-sp24-henrykhaung/"
+        >
+          Home
+      </a>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-1')"
+        >
+          Task 1
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-2')"
+        >
+          Task 2
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-3')"
+        >
+          Task 3
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-4')"
+        >
+          Task 4
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-5')"
+        >
+          Task 5
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          type="button"
+          class="btn-transparent nav-link"
+          onclick="scrollToTask('#task-6')"
+        >
+          Task 6
+        </button>
+      </li>
+    </ul>
+
+    <!-- TASK 1 -->
+    <div class="taskbox-outer" id="task-1">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 1: Drawing Single-Color Triangles</h3>
+        </div>
+
+        <div class="text-start taskp mt-4 mb-5">
+          <p>
+            In this task, we implemented the function `rasterize_triangle` so
+            that we can render a triangle to screen space given 3 points in (x,
+            y) coordinate space.
+          </p>
+          <p>
+            I solved this task by checking for triangle winding, finding the
+            bounding box to sample the pixels in, and checking whether each
+            pixel passes the three line test, which was covered in lecture.
+            First, to make sure the vectors representing the edges of the
+            triangle are counter-clockwise, I used the right hand rule and the
+            cross-product. The sign of the cross-product indicates the winding
+            direction and in my case, since I want the winding to be in
+            counterclockwise, I check if the cross-product sign is negative
+            (indicating counterclock wise) and if it is I swap the position of
+            vertices ie x becomes y and y becomes x. This is to ensure
+            counter-clockwise winding for the three line test. Once this is
+            taken care of, I found the boundaries of the given vertices: the
+            smallest x and y and the biggest x and y. This is so that I can
+            sample points within this bounding box without having to start from
+            (0,0) and ending at (w,h) of screen space. Using this bounding box,
+            I iterate through each point and for each point, I find sample
+            points by adding 0.5 to x and y. Then, I perform the three line test
+            and if the test passes, I call `fill_pixel` helper function to set
+            the color of a pixel. Since this algorithm tests each pixel in the
+            bounding box, it is no worse than one that checks each sample within
+            the bounding box of the triangle.
+          </p>
+
+          <div class="text-center mt-5">
+            <img src="task1.png" alt="task 1 image" />
+            <p class="imgfont">Screenshot of basic/test4.svg</p>
+            <div>
+              At the tip of purple triangle, we see it disconnected when it is
+              supposed to be connected.
+            </div>
+            <div>We can also see aliasing especially in the red triangle.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 2 -->
+    <div class="taskbox-outer" id="task-2">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 2: Antialiasing by Supersampling</h3>
+        </div>
+        <div class="text-start taskp mt-4">
+          <p>
+            In this task, we implemented supersampling to get rid of the
+            "jaggies" that we saw from task 1. In other words, we antialiase by
+            supersampling.
+          </p>
+
+          <p>
+            To support supersampling, I had to modify set_sample_rate,
+            set_framebuffer_target, resolve_to_framebuffer, rasterize_triangle,
+            and add a helper function called fill_supersample_pixel.
+          </p>
+
+          <ul>
+            <li>
+              `set_sample_rate`
+              <p>
+                This function is called when we want to change the supersample
+                rate or when we press = during the runtime of the draw program.
+                The only change needed here to support supersampling is to
+                ensure that when the sample buffer is resized, it is resized to
+                a size of width * height * rate where width and height are the
+                dimensions for the frame buffer while rate is the sample rate.
+                This calculation is needed to support the increased number of
+                samples.
+              </p>
+            </li>
+            <li>
+              `set_framebuffer_target`
+              <p>
+                This function is called when the draw program window is resized.
+                When the program window is resized, we have to resize the sample
+                buffer as well and to support supersampling, the sample rate is
+                accounted for in the resize calculation.
+              </p>
+            </li>
+            <li>
+              `rasterize_triangle`
+              <p>
+                Since supersampling is sampling multiple points within each
+                pixel and averaging them, we need to modify this function to
+                have nested for loops in order to iterate over each pixel inside
+                the bounding box. Then, we test these subpixels with the three
+                line test again and if they are within the triangle, we color
+                them using `fill_supersample_pixel`.
+              </p>
+            </li>
+            <li>
+              `fill_supersample_pixel`
+              <p>
+                This is a helper function I added. This functions similarly to
+                the `fill_pixel` function except it supports supersampling; the
+                function makes it so that all the supersampled pixels, or
+                subpixels, correspond to the pixel in the frame buffer and are
+                changed to the same color. In order to do this, I need to change
+                the way I index into the sample buffer. This is done by
+                accounting for sample rate and keeping track of the sample
+                within the pixel (x, y). This means that I take in one extra
+                parameter which I call `s` and we keep track of it inside the
+                inner loops for the subpixels.
+              </p>
+            </li>
+          </ul>
+          <p>
+            I used the sample_buffer and resized it by doing width * height *
+            sample_rate so that there is enough memory for the subpixels. I also
+            modified the rasterize_triangle function to have two for loops
+            inside the loops for iteration through the pixels. These two inner
+            loops are for iteration through the subpixels; within them, I find
+            the sample point for each subpixel. Then, I perform the 3 point test
+            and if it passes, I call on fill_supersample_pixel to fill the
+            subpixel with the specified color. I also keep track of the index of
+            the current subpixel so that in fill_supersample_pixel, I can index
+            into the correct sample_buffer. The function resolve_to_framebuffer
+            is also modified by taking our subpixels and averaging them down.
+          </p>
+        </div>
+
+        <div align="middle">
+          <table style="width=100%">
+            <tr>
+              <td>
+                <img src="task2s1.png" align="middle" width="400px" />
+                <figcaption class="figcaption" align="middle">
+                  Screenshot of basic/test4.svg at supersample rate = 1 <p>Notice how the tip is disconnected.</p>
+                </figcaption>
+              </td>
+              
+              <td>
+                <img src="task2s4.png" align="middle" width="400px" />
+                <figcaption class="figcaption" align="middle">
+                  Screenshot of basic/test4.svg at supersample rate = 4 <p>This is a bit better, but the tip is still disconnected.</p>
+                </figcaption>
+              </td>
+            </tr>
+            <br />
+            <tr>
+              <td>
+                <img src="task2s9.png" align="middle" width="400px" />
+                <figcaption class="figcaption" align="middle">
+                  Screenshot of basic/test4.svg at supersample rate = 9 <p>This is a bit better since the tip is now almost connected.</p>
+                </figcaption>
+              </td>
+              <td>
+                <img src="task2s16.png" align="middle" width="400px" />
+                <figcaption class="figcaption" align="middle">
+                  Screenshot of basic/test4.svg at supersample rate = 16 <p>Much better!</p>
+                </figcaption>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="text-start taskp mt-4">
+          <p class="mt-4">
+            As supersampling rate increases, the triangle edges are smoother.
+            This is because supersampling is essentially taking a higher
+            resolution and then downsampling and averaging it to the output
+            resolution of the frame buffer.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 3 -->
+    <div class="taskbox-outer" id="task-3">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3 id="task-3">Task 3: Transforms</h3>
+        </div>
+        <div class="text-start taskp mt-4">
+          <p>
+            In this task, we have to implement three transforms: translating,
+            scaling, and rotating. These transforms utilize a 3x3 matrix for
+            homogeneous coordinates.
+          </p>
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task3.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Robot doing a T-pose
+                  </figcaption>
+                </td>
+                <td>
+                  <img
+                    src="task3_custom.png"
+                    align="middle"
+                    width="301px"
+                    height="301px"
+                  />
+                  <figcaption class="figcaption" align="middle">
+                    Robot punching and kicking
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 4 -->
+    <div class="taskbox-outer" id="task-4">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 4: Barycentric coordinates</h3>
+        </div>
+        <div class="text-start taskp mt-4">
+          <p>
+            In this task, we have to implement rasterizing a triangle with
+            colors defined at the vertices and interpolate the pixel colors
+            using barycentric coordinates.
+          </p>
+          <p>
+            Barycentric coordinates is basically a proportion between a point
+            inside a triangle and the triangle's vertices. The way I think about
+            barycentric coordinates is to imagine the triangle as a physical
+            object with mass distributed at its three vertices. This way, the
+            point given by barycentric coordinates, or the point inside the
+            triangle, would be the center of mass. In other words, barycentric
+            coordinates ensure that the point inside the triangle is the center
+            of mass of the triangle. This is why barycentric coordinates consist
+            of three scalar values: alpha, beta, and gamma representing the
+            "weights".
+          </p>
+
+          <p>
+            This implementation is similar to `rasterize_triangle` except that
+            once we are in the innermost loop and after finding the sample
+            points as well as performing the three line test, we calculate
+            alpha, beta, and gamma based on the formula in lecture. We then use
+            these alpha, beta, and gamma values to find the center of mass which
+            would be the color that we want our `fill_supersample_pixel` to use.
+          </p>
+          <div class="text-center mt-5">
+            <img
+              src="task4.png"
+              alt="task 2 supersample = 1 image"
+              height="400px"
+            />
+            <p class="imgfont">svg/basic/test7.svg</p>
+            <p>
+              Using barycentric coordinates help us create a smooth transition
+              of colors within the triangle.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 5 -->
+    <div class="taskbox-outer" id="task-5">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 5: "Pixel sampling" for texture mapping</h3>
+        </div>
+        <div class="text-start taskp mt-4">
+          <p>
+            In this task, we have to implement pixel sampling using two methods:
+            nearest neighbor or bilinear interpolation.
+          </p>
+          <p>
+            Pixel sampling is when you apply a texture into screen space. You
+            take a pixel and its corresponding color from the texture and map it
+            to the pixel in screen space. This requires the color information,
+            ie where it is located in texture space, from the texture to
+            determine the final color of a pixel. To do this, I had to find the
+            barycentric coordinates (alpha, beta, and gamma) of the sample
+            point. After this, I have to convert to the sample point to texture
+            space by using these alpha, beta, and gamma values. Once the sample
+            point is converted to texture space which is represented by (u, v)
+            coordinates, we then apply texture sampling using either nearest
+            neighbor or billinear interpolation method.
+          </p>
+          <p>
+            In nearest neighbor sampling, we simply take the closest (u, v)
+            coordinate and sample the texture at that point. On the other hand,
+            in bilinear interpolation, we get the four closest (u, v)
+            coordinates and then do a weighted average (through linear
+            interpolation) and then sample.
+          </p>
+          <p>The following functions were implemented for pixel sampling:</p>
+          <ul>
+            <li>
+              `rasterize_textured_triangle`
+              <p>
+                This function is very similar to the other rasterize triangle
+                functions except it converts to (u, v) coordinates. These
+                coordinates are passed onto the `sample` function.
+              </p>
+            </li>
+            <li>
+              `sample`
+              <p>
+                This function returns the color for the pixel from the texture
+                based on the pixel sampling method.
+              </p>
+            </li>
+
+            <li>
+              `sample_nearest`
+              <p>
+                This function takes the nearest texture coordinates and returns
+                the color. This is done by taking the (u, v) coordinates to
+                match the width and height of the mipmap level, which is always
+                0, for pixel sampling.
+              </p>
+            </li>
+
+            <li>
+              `sample_bilinear`
+              <p>
+                This function takes the nearest four texture coordinates and
+                returns the interpolated color. We also have to scale the (u, v)
+                coordinates to match the width and height of the mipmap level.
+              </p>
+            </li>
+          </ul>
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task5ns1.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Nearest sampling at supersample rate = 1
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task5ns16.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Nearest sampling at supersample rate = 16
+                  </figcaption>
+                </td>
+              </tr>
+              <br />
+              <tr>
+                <td>
+                  <img src="task5bi1.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Bilinear interpolation at sample rate = 1
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task5bi16.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Bilinear interpolation at sample rate = 16
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <p class="mt-4">
+            Between nearest sampling at supersample rate 1 and bilinear
+            interpolation at supersample rate 1, we see that the latitude lines
+            (horizontal white lines) are a bit more blurry or better antialiased
+            for bilinear interpolation.
+          </p>
+          <p>
+            Then, for the methods with supersampling rate 16, the differences
+            are much harder to tell because supersampling already antialiases;
+            however, bilinear interpolation is still better. For example, if you
+            look at some of the longitude lines closely, it is a bit more
+            blurry.
+          </p>
+
+          <p>
+            With these observations, there will be large differences when the
+            supersample rate is at 1, or when there is no supersampling. Nearest
+            sampling tends to produce blocky, pixelated, and sometimes jagged
+            edges since it only takes the nearest texel and not consider other
+            adjacent texels like bilinear interpolation does. This is especially
+            noticeable when we zoom in with the pixel inspector at pixels where
+            we move from high frequencies to low frequencies.
+          </p>
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="task5ns1extra.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Nearest sampling at supersample rate = 1 of Campanile
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="task5bi1extra.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Bilinear interpolation at supersample rate = 1 of Campanile
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <p class="mt-4">
+            Looking at the pixel inspectors, we can see how bilinear
+            interpolation is much better when going from high frequencies to
+            low frequencies. In this case, from the black pixels to the
+            brownish/lighter pixels.
+          </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <!-- TASK 6 -->
+    <div class="taskbox-outer" id="task-6">
+      <div class="taskbox-inner">
+        <div class="text-center taskdiv">
+          <h3>Task 6: "Level sampling" with mipmaps for texture mapping</h3>
+        </div>
+        <div class="text-start taskp mt-4">
+          <p>
+            In this task, we have to implement level sampling to the pixel
+            sampling algorithm from task 5.
+          </p>
+
+          <p>
+            Level sampling works by sampling from different levels, or
+            resolutions. These different resolutions are stored in a something
+            called a mipmap. We use the mipmap to sample at lower resolution for
+            higher frequencies.
+          </p>
+
+          <ul>
+            <li>
+              `rasterize_textured_triangle`
+              <p>
+                I implemented level sampling by additionally finding the barycentric coordinates for the sample point's neighbors.
+                These neighbor barycentric coordinates are used to calculate the level in the `get_level` function.
+                These neighbor barycentric coordinates are first used to find the rate of change of u and v in respect to x and y 
+                respectively. This is so that we know which level in the mipmap to use. Larger derivatives result in larger level 
+                values and therefore lower resolutions. This is implemented in `get_level`.
+              </p>
+            </li>
+            <li>
+              `get_level`
+              <p>
+                We use the derivatives mentioned above and using the level calculation in lecture to find the level.
+              </p>
+            </li>
+            <li>
+              `sample`
+              <p>
+                Once we find which level to sample from, we can either use the two
+                methods from before: nearest or bilinear interpolation. With nearest level, L_NEAREST, we use the nearest level to sample from.
+                With L_LINEAR, we take two levels above and below the level returned
+                by `get_level` and interpolate them.
+              </p>
+            </li>
+          </ul>
+
+          <p>
+            With level sampling implemented, we can have in total 3 level sampling
+            methods and 2 pixel sampling methods.
+          </p>
+
+          <div align="middle">
+            <table style="width=100%">
+              <tr>
+                <td>
+                  <img src="lzero_pnearest.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Screenshot of Yoshi, L_ZERO and P_NEAREST
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="lzero_plinear.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Screenshot of Yoshi, L_ZERO and P_LINEAR
+                  </figcaption>
+                </td>
+              </tr>
+              <br />
+              <tr>
+                <td>
+                  <img src="lnearest_pnearest.png" align="middle" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Screenshot of Yoshi, L_NEAREST and P_NEAREST
+                  </figcaption>
+                </td>
+                <td>
+                  <img src="lnearest_plinear.png" align="midde" width="400px" />
+                  <figcaption class="figcaption" align="middle">
+                    Screenshot of Yoshi, L_NEAREST and P_LINEAR
+                  </figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+          
+          <div align="middle" class="ml-5 mr-5 mt-5 mb-5">
+          <p>
+            This is for the first row of images. On the left image, if we focus on the edge as well as the eye, we
+            can see that there is better antialiasing in L_ZERO and P_LINEAR.
+            As mentioned eariler in the task 5 section, this is because
+            P_NEAREST does not do interpolation like P_LINEAR and only takes
+            one point from the texture. Therefore, we see some
+            staircases/jaggies in the left image whereas in the right image,
+            the staircases/jaggies are antialiased.
+          </p>
+
+          <p>
+            This is for the last row of images. In the left image, because we used L_NEAREST instead of level 0,
+            we can sample at lower resolutions which is why we don't see
+            staircases unlike the left image using L_ZERO. Similar to how
+            there is interpolation for P_LINEAR, there is also interpolation
+            for L_LINEAR but instead with levels which is why there is much
+            better antialiasing for the right image.
+          </p>          
+          </div>
+
+
+          <p class="mt-5">
+            With everything implemented, we can discuss the tradeoffs between
+            speed, memory usage, and antialiasing power between supersampling,
+            pixel sampling, and level sampling. Supersampling is a powerful
+            antialising technique; however, it requires more memory to store the
+            higher resolution image. It is also computationally more intensive
+            due to the number of increased number of samples per pixel. Pixel
+            sampling is not as effective compared to supersampling especially
+            for high frequency pixels. It sacrifices some antialiasing power.
+            Because of this and because it does not sample subpixels, it
+            requires less computational power and no additional memory. Level
+            sampling antialiasing power is more of a balance of supersampling and pixel
+            sampling in that it precomputes multiple texture resolutions and
+            stores them in a mipmap and utilizes them to reduce aliasing across
+            different viewing distances. Therefore, it is better aliasing power
+            without having to worry about needing more computational power at
+            the expense of requiring additional memory for the mipmap.
+          </p>
+
+          <div class="text-center mt-5">
+            <img
+              src="bestpic.png"
+              alt="task 2 supersample = 16 image"
+              height="400px"
+            />
+            <p class="imgfont">
+              Screenshot of Yoshi using L_LINEAR and P_LINEAR at sample rate =
+              16 and resolution 800x800
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="breakline" />
+
+    <hr class="breakline-bottom" />
+
+    <!-- UI -->
+
+    <button
+      class="btn btn-primary btn-scroll-to-top scroll-to-top"
+      onclick="scrollToTop()"
+    >
+      Scroll to Top
+    </button>
+
+    <!-- Bootstrap JS scripts (jQuery and Popper.js) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- scroll functions -->
+    <script src="../template.js"></script>
+  </body>
+</html>
