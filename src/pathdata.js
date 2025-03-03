@@ -4,7 +4,7 @@ export const workExps = [
 ];
   
 export const projects = [
-  { slug: "rookiesql", name: "RookieSQL", description: "sql from scratch" },
+  { slug: "jqlite", name: "JQLite", description: "sqlite from scratch, java" },
   { slug: "pathtracer", name: "Path Tracer", description: "realistic light rendering" },
   { slug: "reacting-to-react", name: "Reacting to React", description: "frontend, learning" },
   { slug: "others", name: "See more", description: "ideas, unfinished, current" }
