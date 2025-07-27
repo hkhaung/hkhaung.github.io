@@ -4,6 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
+  output: 'static',
   site: "https://hkhaung.github.io",
   integrations: [mdx(), sitemap(), tailwind()],
 });
