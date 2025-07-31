@@ -1,7 +1,7 @@
 ---
-title: "Learning Web Dev"
-description: "Typing game/test"
-date: "January 5 2020"
+title: "Autocorrected Typing Software"
+description: "React/Flask web app to test your typing skill"
+date: "January 4 2020"
 repoURL: "https://github.com/hkhaung/autocorrected-typing-software"
 ---
 
@@ -9,12 +9,9 @@ Autocorrected Typing Software, or ATS, is a small full-stack web application tha
 
 
 Check the repo out <a href="https://github.com/hkhaung/autocorrected-typing-software" target="_blank">here</a>.
-<!-- 
-<p>
-  <img src="/imgs/learning-webdev/frontend-ecomm.png" alt="Another image from repo">
-</p> -->
 
-<!-- ![]() -->
+![Latest](/imgs/ats/latestdesign.png)
+
 
 ## Purpose
 
@@ -52,5 +49,5 @@ Possible features:
 
 <p>
   <img src="/imgs/ats/olddesign.png" alt="Old design">
-  <em style="display: block; text-align: center; font-size: 14px;">Old design</em>
+  <em style="display: block; text-align: center; font-size: 14px;">Old UI</em>
 </p>
