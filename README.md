@@ -2,6 +2,9 @@
 
 Welcome to my personal website. The theme/template used is [Astro Nano](https://github.com/markhorn-dev/astro-nano).
 
+Note: I currently use dates to order the projects (TODO change)
+
+
 ## Commands
 
 All commands are run from the root of the project, from a terminal:

@@ -1,7 +1,7 @@
 ---
 title: "Path Tracer"
 description: "Ray tracing renderer"
-date: "January 3 2020"
+date: "January 4 2020"
 ---
 
 <!-- ![Path Tracer]() -->
